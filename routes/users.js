@@ -8,8 +8,11 @@ router.post("/register", (req, res) => {
   const { emailId, name, password } = req.body;
 
   users.push({ emailId, name, password, id: uuidv4(), isActive: true });
-
-  res.send(`${name} has been added to the Database`);
+  console.log("USERS", users);
+  res.json({
+    status: 200,
+    body: { message: `${name} has been added to the Database` },
+  });
 });
 
 router.get("/", (req, res) => {

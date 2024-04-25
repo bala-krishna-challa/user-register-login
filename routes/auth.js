@@ -7,7 +7,7 @@ router.post("/login", (req, res) => {
   const { emailId, password } = req.body;
 
   if (!emailId || !password) {
-    res
+    return res
       .status(400)
       .json({ message: "User email and password cannot be empty!" });
   }
@@ -15,22 +15,23 @@ router.post("/login", (req, res) => {
   const user = users.find((user) => user.emailId === emailId);
 
   if (!user) {
-    res.json
-    ({
+    return res.json({
       status: 401,
-      body: { message: "Invalid user email or password!" }
+      body: { message: "Invalid user email or password!" },
     });
   }
 
   if (!(user.password === password)) {
-    res.json
-    ({
+    return res.json({
       status: 401,
-      body: { message: "Invalid user email or password!" }
-    })
+      body: { message: "Invalid user email or password!" },
+    });
   }
 
-  return res.status(200).json({ token: "abc" });
+  return res.json({
+    status: 200,
+    body: { token: "abc" },
+  });
 });
 
 export default router;
