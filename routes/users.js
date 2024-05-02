@@ -5,9 +5,27 @@ import { users } from "../user.js";
 const router = express.Router();
 
 router.post("/register", (req, res) => {
+  if (req.headers["authorization"] !== "Bearer abc") {
+    return res.json({
+      status: 401,
+      body: { message: "Invalid token" },
+    });
+  }
+
   const { emailId, name, password } = req.body;
 
-  users.push({ emailId, name, password, id: uuidv4(), isActive: true });
+  users.push({
+    emailId,
+    name,
+    password,
+    id: uuidv4(),
+    isActive: true,
+    picture: {
+      large: "https://randomuser.me/api/portraits/men/82.jpg",
+    },
+    phone: "0475-4996568",
+    cell: "0173-5202019",
+  });
   console.log("USERS", users);
   res.json({
     status: 200,
@@ -16,7 +34,16 @@ router.post("/register", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  res.send({ users });
+  if (req.headers["authorization"] !== "Bearer abc") {
+    return res.json({
+      status: 401,
+      body: { message: "Invalid token" },
+    });
+  }
+  res.json({
+    status: 200,
+    body: { users },
+  });
 });
 
 export default router;
